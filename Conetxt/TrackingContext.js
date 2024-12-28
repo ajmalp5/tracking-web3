@@ -1,7 +1,9 @@
 import { ethers } from "ethers";
+
+import React, {useEffect, useState} from 'react'
 import Web3Model from 'web3modal'
 import tracking from "./Tracking.json";
-const ContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+const ContractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 const Contract = tracking.abi;
 
 const fetchContract = async (signerOrProvider) => {
@@ -24,6 +26,8 @@ export const TrackingProvider = ({ children }) => {
       const provider = new ethers.providers.Web3Provider(connection);
       const signer = provider.getSigner();
       const contract = fetchContract(signer);
+
+      console.log(contract, 'contract')
       const createItem = await contract.createShipment(
         receiver,
         new Date(pickupTime),
@@ -75,8 +79,8 @@ export const TrackingProvider = ({ children }) => {
 
       const provider = new ethers.providers.JsonRpcProvider();
       const contract = fetchContract(provider);
-
       const shipmentCount = await contract.getShipmentCount(accounts[0]);
+     
       return shipmentCount.toNumber();
     } catch {
       console.log("Error while getting Shipment count");
@@ -186,6 +190,8 @@ export const TrackingProvider = ({ children }) => {
 
       if (accounts.length) {
         setCurrentAccount(accounts[0]);
+
+        console.log(accounts, 'accounts')
       } else {
         console.log("No accounts found");
       }
@@ -225,7 +231,7 @@ export const TrackingProvider = ({ children }) => {
         startShipment,
         checkIfWalletConnected,
         connectWallet,
-        currentUser,
+        currentAccount,
         DappName
       }}
     >
